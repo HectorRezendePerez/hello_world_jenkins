@@ -1,13 +1,9 @@
 pipeline {
-    agent {
-        docker {
-            image 'alpine:latest' // Imagem Docker a ser usada como agente (Alpine Linux neste exemplo)
-            // args '-v /path/to/workspace:/var/jenkins_home' // Argumentos adicionais do contêiner Docker (opcional)
-        }
-    }
+    agent none // Desabilita a alocação de um nó e executará na máquina mestre
     
     stages {
-        stage('Echo Hello World') {
+        stage('Execute on Master') {
+            agent any // Opcional: Se você quiser executar esta etapa em um nó escravo específico, defina o agente aqui
             steps {
                 sh 'echo "Hello World"'
             }
