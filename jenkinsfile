@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Connect to Remote Machine and Execute Shell Command') {
+            steps {
+                script {
+                    // Defina as credenciais SSH da máquina remota no Jenkins
+                    def remoteServer = [:]
+                    remoteServer.name = 'ftp_server' // Substitua pelo nome da credencial SSH configurada no Jenkins
+                    remoteServer.host = 'server' // Substitua pelo endereço IP ou nome do servidor remoto
+                    remoteServer.user = 'service_jenkins' // Substitua pelo usuário SSH da máquina remota
+                    
+                    // Execute o comando Shell (sh) na máquina remota
+                    sshCommand remote: remoteServer, command: 'echo "Hello World"'
+                }
+            }
+        }
+    }
+}
