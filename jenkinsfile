@@ -1,19 +1,15 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'alpine:latest' // Imagem Docker a ser usada como agente (Alpine Linux neste exemplo)
+            label 'my-docker-agent' // Opcional: rótulo personalizado para o agente Docker
+        }
+    }
     
     stages {
-        stage('Connect to Remote Machine and Execute Shell Command') {
+        stage('Echo Hello World') {
             steps {
-                script {
-                    // Defina as credenciais SSH da máquina remota no Jenkins
-                    def remoteServer = [:]
-                    remoteServer.name = 'ftp_server' // Substitua pelo nome da credencial SSH configurada no Jenkins
-                    remoteServer.host = 'server' // Substitua pelo endereço IP ou nome do servidor remoto
-                    remoteServer.user = 'service_jenkins' // Substitua pelo usuário SSH da máquina remota
-                    
-                    // Execute o comando Shell (sh) na máquina remota
-                    sshCommand remote: remoteServer, command: 'echo "Hello World"'
-                }
+                sh 'echo "Hello World"'
             }
         }
     }
