@@ -2,14 +2,14 @@ pipeline {
     agent {
         docker {
             image 'alpine:latest' // Imagem Docker a ser usada como agente (Alpine Linux neste exemplo)
-            label 'my-docker-agent' // Opcional: rótulo personalizado para o agente Docker
+            // args '-v /path/to/workspace:/var/jenkins_home' // Argumentos adicionais do contêiner Docker (opcional)
         }
     }
     
     stages {
-        stage('Echo Hello Mundo') {
+        stage('Echo Hello World') {
             steps {
-                sh 'echo "Hello Mundo"'
+                sh 'echo "Hello World"'
             }
         }
     }
