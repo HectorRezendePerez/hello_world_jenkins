@@ -1,18 +1,11 @@
 pipeline {
-    agent any // O Jenkins escolherá automaticamente um nó escravo disponível
+    agent none // Desabilita a alocação de um nó e executará na máquina mestre
     
     stages {
-        stage('Execute on Remote Server') {
+        stage('Execute on Master') {
+            agent any // Opcional: Se você quiser executar esta etapa em um nó escravo específico, defina o agente aqui
             steps {
-                script {
-                    def remoteServer = [:]
-                    remoteServer.name = 'ftp_server' // Substitua pelo nome da credencial SSH configurada no Jenkins
-                    remoteServer.host = 'server' // Substitua pelo endereço IP ou nome do servidor remoto
-                    remoteServer.user = 'service_jenkins' // Substitua pelo nome de usuário SSH no servidor remoto
-                    remoteServer.allowAnyHosts = true // Configuração de segurança - permitir qualquer host (não recomendado em produção)
-                    
-                    sshCommand remote: remoteServer, command: 'echo "Hello World" && hostname' // Comando a ser executado no servidor remoto
-                }
+                sh 'ping jenkins-server'
             }
         }
     }
