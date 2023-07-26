@@ -5,7 +5,8 @@ pipeline {
         stage('Execute on Master') {
             agent any // Opcional: Se você quiser executar esta etapa em um nó escravo específico, defina o agente aqui
             steps {
-                sh 'echo "Hello World"'
+                sh 'echo "Hello World1"'
+                sh 'echo "Hello World2"'
             }
         }
     }
