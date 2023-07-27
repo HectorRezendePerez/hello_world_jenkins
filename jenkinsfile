@@ -14,10 +14,10 @@ pipeline {
                     def remoteFolderPath = '/home'
                     
                     // Pasta no contêiner da workstation onde deseja copiar os arquivos
-                    def localFolderPath = '/tmp/teste'
+                    def localFolderPath = '/tmp'
                     
                     // Cria o diretório local no contêiner, se não existir
-                    sh "docker exec server mkdir -p ${localFolderPath}"
+                    // sh "docker exec server mkdir -p ${localFolderPath}"
                     
                     // Utiliza o plugin Pipeline Utility Steps para copiar os arquivos
                     withCredentials([usernamePassword(credentialsId: 'ftp-credentials', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
