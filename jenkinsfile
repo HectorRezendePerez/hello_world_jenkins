@@ -1,17 +1,30 @@
 pipeline {
-    agent any // O Jenkins escolherá automaticamente um nó escravo disponível
+    agent any
     
     stages {
-        stage('Execute on Remote Server') {
+        stage('Copy files from FTP to Workstation') {
             steps {
                 script {
-                    def remoteServer = [:]
-                    remoteServer.name = 'workstation' // Substitua pelo nome da credencial SSH configurada no Jenkins
-                    remoteServer.host = 'workstation' // Substitua pelo endereço IP ou nome do servidor remoto
-                    remoteServer.user = 'root' // Substitua pelo nome de usuário SSH no servidor remoto
-                    remoteServer.allowAnyHosts = true // Configuração de segurança - permitir qualquer host (não recomendado em produção)
+                    // Define as informações de conexão FTP
+                    def ftpServer = 'server'
+                    def ftpUsername = 'service_jenkins'
+                    def ftpPassword = 'manager'
                     
-                    sshCommand remote: remoteServer, command: 'echo "Hello World" && hostname' // Comando a ser executado no servidor remoto
+                    // Pasta no servidor FTP que deseja copiar
+                    def remoteFolderPath = '/home'
+                    
+                    // Pasta no contêiner da workstation onde deseja copiar os arquivos
+                    def localFolderPath = '/tmp/teste'
+                    
+                    // Cria o diretório local no contêiner, se não existir
+                    sh "docker exec server mkdir -p ${localFolderPath}"
+                    
+                    // Utiliza o plugin Pipeline Utility Steps para copiar os arquivos
+                    withCredentials([usernamePassword(credentialsId: 'ftp-credentials', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
+                        sh """
+                            lftp -c 'open -u ${FTP_USER},${FTP_PASS} ${ftpServer}; mirror --verbose ${remoteFolderPath} ${localFolderPath}'
+                        """
+                    }
                 }
             }
         }
