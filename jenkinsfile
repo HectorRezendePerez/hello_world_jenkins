@@ -15,7 +15,9 @@ pipeline {
             steps {
                 sh '''
                 ls -la
-                echo 'manager' | sftp -i ~/.ssh/id_rsa root@server
+                echo 'manager' | echo 'manager' | sftp -i ~/.ssh/id_rsa root@server
+                manager
+
                 cd /tmp/teste
                 put -r *
                 bye
