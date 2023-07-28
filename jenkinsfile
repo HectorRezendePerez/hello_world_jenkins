@@ -15,9 +15,7 @@ pipeline {
             steps {
                 sh '''
                 ls -la
-                echo 'manager' | echo 'manager' | sftp -i ~/.ssh/id_rsa root@server
-                manager
-
+                echo 'manager' | echo 'manager' | sftp -i ~/.ssh/id_rsa service_jenkins@server
                 cd /tmp/teste
                 put -r *
                 bye
