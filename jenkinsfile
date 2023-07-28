@@ -15,7 +15,7 @@ pipeline {
             steps {
                 sh '''
                 ls -la
-                ftp -n servidor_ftp <<EOF
+                ftp -n server <<EOF
                 user root manager
                 cd /tmp/teste
                 put -r *
