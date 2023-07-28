@@ -15,8 +15,9 @@ pipeline {
             steps {
                 sh '''
                 ls -la
-                ftp -n server <<EOF
-                user root manager
+                sftp -i ~/.ssh/id_rsa root@server <<EOF
+                yes
+                manager
                 cd /tmp/teste
                 put -r *
                 bye
