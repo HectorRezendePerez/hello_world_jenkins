@@ -1,32 +1,32 @@
 pipeline {
-    agent any
-    
+    agent none
+
     stages {
-        stage('Copy files from FTP to Workstation') {
+        stage('Baixar projeto do GitHub') {
+            agent {
+                label 'master'
+            }
             steps {
-                script {
-                    // Define as informações de conexão FTP
-                    def ftpServer = 'server'
-                    def ftpUsername = 'service_jenkins'
-                    def ftpPassword = 'manager'
-                    
-                    // Pasta no servidor FTP que deseja copiar
-                    def remoteFolderPath = '/home'
-                    
-                    // Pasta no contêiner da workstation onde deseja copiar os arquivos
-                    def localFolderPath = '/tmp'
-                    
-                    // Cria o diretório local no contêiner, se não existir
-                    // sh "docker exec server mkdir -p ${localFolderPath}"
-                    
-                    // Utiliza o plugin Pipeline Utility Steps para copiar os arquivos
-                    withCredentials([usernamePassword(credentialsId: 'ftp-credentials', usernameVariable: 'FTP_USER', passwordVariable: 'FTP_PASS')]) {
-                        sh """
-                            lftp -c 'open -u ${FTP_USER},${FTP_PASS} ${ftpServer}; mirror --verbose ${remoteFolderPath} ${localFolderPath}'
-                        """
-                    }
-                }
+                git branch: 'main', credentialsId: 'github_token_jenkins', url: 'https://github.com/HectorRezendePerez/Azulino_Gmud_Email_Automation.git'
             }
         }
+
+        stage('Transferir arquivos para o servidor FTP') {
+            agent {
+                label 'master'
+            }
+            steps {
+                sh 'ls -la && ftp -n servidor_ftp <<EOF\nuser root manager\ncd /tmp/teste\nput -r *\nbye\nEOF'
+            }
+        }
+
+        // stage('Reiniciar servidor da aplicação Node.js') {
+        //     agent {
+        //         label 'nodejs-slave'
+        //     }
+        //     steps {
+        //         sh 'ssh usuario@servidor_nodejs "comando_para_reiniciar_servidor"'
+        //     }
+        // }
     }
 }
