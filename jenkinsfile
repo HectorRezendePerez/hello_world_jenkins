@@ -3,18 +3,12 @@ pipeline {
 
     stages {
         stage('Baixar projeto do GitHub') {
-            agent {
-                label 'master'
-            }
             steps {
                 git branch: 'main', credentialsId: 'github_token_jenkins', url: 'https://github.com/HectorRezendePerez/Azulino_Gmud_Email_Automation.git'
             }
         }
 
         stage('Transferir arquivos para o servidor FTP') {
-            agent {
-                label 'master'
-            }
             steps {
                 sh 'ls -la && ftp -n servidor_ftp <<EOF\nuser root manager\ncd /tmp/teste\nput -r *\nbye\nEOF'
             }
