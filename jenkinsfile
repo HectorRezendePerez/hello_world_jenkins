@@ -15,13 +15,11 @@ pipeline {
             steps {
                 sh '''
                 ls -la
-                sftp -i ~/.ssh/id_rsa root@server <<EOF
-                yes
-                manager
+                sftp -i ~/.ssh/id_rsa root@server
+                manager 
                 cd /tmp/teste
                 put -r *
                 bye
-                EOF
                 '''
             }
         }
